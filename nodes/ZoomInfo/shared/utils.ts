@@ -2,17 +2,17 @@ import type { IDataObject, IExecuteSingleFunctions, IHttpRequestOptions } from '
 import { NodeOperationError, jsonParse } from 'n8n-workflow';
 
 /**
- * Merges the user-supplied JSON request body into the outgoing request.
+ * Wraps the user-supplied attributes in the JSON:API envelope the GTM API
+ * expects: `{ "data": { "type": "<ResourceType>", "attributes": { ... } } }`.
  *
- * The GTM search/enrich endpoints take their whole query as a JSON body whose
- * field names vary per endpoint, so the node accepts the body verbatim instead
- * of guessing at a schema.
+ * The `data.type` value is set per-operation in that operation's
+ * `routing.request.body`, so this only has to fill in `attributes`.
  */
-export async function applyRequestBody(
+export async function applyAttributes(
 	this: IExecuteSingleFunctions,
 	requestOptions: IHttpRequestOptions,
 ): Promise<IHttpRequestOptions> {
-	const raw = this.getNodeParameter('requestBody', '{}') as string | IDataObject | undefined;
+	const raw = this.getNodeParameter('attributes', '{}') as string | IDataObject | undefined;
 
 	let parsed: IDataObject;
 
@@ -22,7 +22,7 @@ export async function applyRequestBody(
 		try {
 			parsed = jsonParse<IDataObject>(raw);
 		} catch {
-			throw new NodeOperationError(this.getNode(), 'Request body is not valid JSON', {
+			throw new NodeOperationError(this.getNode(), 'Attributes is not valid JSON', {
 				description: 'Provide a JSON object, for example {"companyName":"ZoomInfo"}',
 			});
 		}
@@ -30,14 +30,18 @@ export async function applyRequestBody(
 		parsed = raw;
 	}
 
-	if (Array.isArray(parsed) || typeof parsed !== 'object') {
-		throw new NodeOperationError(this.getNode(), 'Request body must be a JSON object');
+	if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+		throw new NodeOperationError(this.getNode(), 'Attributes must be a JSON object', {
+			description: 'Send the attributes only. The node adds the surrounding data/type envelope.',
+		});
 	}
 
-	requestOptions.body = {
-		...((requestOptions.body as IDataObject) ?? {}),
-		...parsed,
-	};
+	const body = (requestOptions.body ?? {}) as IDataObject;
+	const data = (body.data ?? {}) as IDataObject;
+
+	data.attributes = parsed;
+	body.data = data;
+	requestOptions.body = body;
 
 	return requestOptions;
 }

@@ -42,8 +42,8 @@ export class ZoomInfo implements INodeType {
 		requestDefaults: {
 			baseURL: 'https://api.zoominfo.com/gtm/data/v1',
 			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
+				Accept: 'application/vnd.api+json',
+				'Content-Type': 'application/vnd.api+json',
 			},
 		},
 		properties: [
@@ -53,17 +53,17 @@ export class ZoomInfo implements INodeType {
 				type: 'options',
 				options: [
 					{
-						name: 'Client Credentials',
-						value: 'clientCredentials',
-						description: 'Server-to-server auth. Recommended for unattended workflows.',
-					},
-					{
 						name: 'Authorization Code (PKCE)',
 						value: 'pkce',
-						description: 'Act as a specific ZoomInfo user. Uses single-use refresh tokens.',
+						description: 'Sign in as a ZoomInfo user. Requires a client ID and secret.',
+					},
+					{
+						name: 'Client Credentials',
+						value: 'clientCredentials',
+						description: 'Server-to-server auth with no user sign-in',
 					},
 				],
-				default: 'clientCredentials',
+				default: 'pkce',
 			},
 			{
 				displayName: 'Resource',
