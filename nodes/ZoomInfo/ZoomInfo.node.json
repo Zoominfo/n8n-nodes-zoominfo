@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-zoominfo.zoomInfo",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Sales", "Data & Storage"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://docs.zoominfo.com/docs/zoominfo-oauth-scopes"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://docs.zoominfo.com/"
+			}
+		]
+	}
+}
