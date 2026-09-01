@@ -32,7 +32,6 @@
         "test": "npm run build && node --test \"test/*.test.mjs\"",
         "test:live": "node scripts/live.mjs",
         "smoke": "npm run build && node scripts/smoke.mjs",
-        "release": "n8n-node release",
         "prepublishOnly": "n8n-node prerelease"
     },
     "engines": {
@@ -42,7 +41,8 @@
         "dist"
     ],
     "publishConfig": {
-        "access": "public"
+        "access": "public",
+        "provenance": true
     },
     "n8n": {
         "n8nNodesApiVersion": 1,
@@ -56,10 +56,10 @@
     },
     "devDependencies": {
         "@n8n/node-cli": "^0.45.4",
+        "@semantic-release/git": "^11.0.1",
         "eslint": "9.32.0",
         "n8n-core": "^2.36.5",
         "prettier": "3.6.2",
-        "release-it": "^19.0.4",
         "typescript": "5.9.2"
     },
     "peerDependencies": {

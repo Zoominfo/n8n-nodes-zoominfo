@@ -325,8 +325,11 @@ pages rather than records. Secrets and the access token are redacted from all ou
 
 Run it before a release; it is deliberately excluded from CI.
 
-Releases publish from CI via `.github/workflows/publish.yml` with npm provenance;
-n8n does not accept verified nodes published from a local machine.
+Releases are cut by semantic-release from `.github/workflows/semantic-release.yml`
+(**Actions → Semantic Release → Run workflow**), which derives the version from the
+Conventional Commit messages since the last release and publishes to npm with a
+provenance attestation. n8n does not accept verified nodes published from a local
+machine, and `prepublishOnly` blocks one.
 
 ## Roadmap
 
