@@ -2,7 +2,10 @@
 
 ## 1.0.0
 
-Initial release.
+Initial release, published as `@zoominfo/n8n-nodes-zoominfo`. The scope is
+ZoomInfo's existing npm organisation, the same one that owns
+`@zoominfo/gtm-ai-cli`, so ownership of the package follows org membership
+rather than one maintainer's account.
 
 - ZoomInfo node covering the GTM API: Contact (search, enrich), Company (search,
   enrich), Signal (intent, scoops, news), and Usage (get).

@@ -39,7 +39,10 @@ process.env.N8N_ENCRYPTION_KEY ??= 'n8n-nodes-zoominfo-test-key';
 const { Workflow } = require('n8n-workflow');
 const { ExecuteContext, RoutingNode } = require('n8n-core');
 
-const NODE_TYPE = 'n8n-nodes-zoominfo.zoomInfo';
+// Derived from package.json rather than hardcoded: n8n forms a node's type as
+// `<package name>.<node name>`, so a package rename has to reach here too.
+const { name: PACKAGE_NAME } = require(join(root, 'package.json'));
+const NODE_TYPE = `${PACKAGE_NAME}.zoomInfo`;
 
 /** Loads the compiled node. Throws a pointed message if dist/ is stale. */
 function loadNodeType() {

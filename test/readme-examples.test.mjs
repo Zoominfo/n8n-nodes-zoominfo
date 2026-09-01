@@ -20,7 +20,14 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const { ZoomInfo } = require(join(root, 'dist/nodes/ZoomInfo/ZoomInfo.node.js'));
 
 const { description } = new ZoomInfo();
-const NODE_TYPE = 'n8n-nodes-zoominfo.zoomInfo';
+
+// Derived, not hardcoded. n8n forms a node's type as `<package name>.<node
+// name>`, so renaming the package — adding the @zoominfo scope, say — changes
+// every `type` in the README examples too. Reading both ends from source means
+// a rename that misses the README fails this test instead of shipping examples
+// that no longer import.
+const { name: PACKAGE_NAME } = require(join(root, 'package.json'));
+const NODE_TYPE = `${PACKAGE_NAME}.${description.name}`;
 
 const knownParameters = new Set(description.properties.map((p) => p.name));
 const knownCredentials = new Set(description.credentials.map((c) => c.name));

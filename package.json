@@ -1,5 +1,5 @@
 {
-    "name": "n8n-nodes-zoominfo",
+    "name": "@zoominfo/n8n-nodes-zoominfo",
     "version": "0.1.0",
     "description": "n8n community node for the ZoomInfo GTM API: contact and company search and enrichment, intent, scoops, news, and usage",
     "license": "MIT",
@@ -41,6 +41,9 @@
     "files": [
         "dist"
     ],
+    "publishConfig": {
+        "access": "public"
+    },
     "n8n": {
         "n8nNodesApiVersion": 1,
         "strict": true,
