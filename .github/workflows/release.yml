@@ -6,7 +6,7 @@
 #
 # ─── HOW A RELEASE HAPPENS ─────────────────────────────────────────────────────
 #
-# Manually: Actions -> Semantic Release -> Run workflow. There is no tag or
+# Manually: Actions -> Release -> Run workflow. There is no tag or
 # version to pick. semantic-release reads the Conventional Commit messages since
 # the last release, decides the version itself, and does nothing at all if no
 # commit warrants one.
@@ -37,7 +37,7 @@
 # npm trusted publishing, configured once against this repository:
 #
 #   npm login                              # a ZoomInfo-owned npm account
-#   npm trust github --file semantic-release.yml
+#   npm trust github --file release.yml
 #
 # There is deliberately no NPM_TOKEN. Publishing authenticates over OIDC, so no
 # long-lived npm credential is stored in this repository at all. `id-token:
@@ -49,7 +49,7 @@
 # main: the default GITHUB_TOKEN cannot push to a protected branch, and commits
 # it makes do not trigger downstream workflows.
 
-name: Semantic Release
+name: Release
 
 on:
   workflow_dispatch:

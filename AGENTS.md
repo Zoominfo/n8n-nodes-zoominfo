@@ -84,7 +84,7 @@ project _may_ contain example nodes and/or credentials that need to be
 ## Commits and releases
 
 Commit messages **must** follow [Conventional Commits](https://www.conventionalcommits.org).
-This is not a style preference: `.github/workflows/semantic-release.yml` runs
+This is not a style preference: `.github/workflows/release.yml` runs
 semantic-release, which reads the commit types since the last release to decide
 the next version. A commit that does not follow the convention is invisible to
 that calculation.
@@ -101,7 +101,7 @@ major. When squash-merging a PR, the **squash title becomes the commit message**
 so it has to follow the convention too — an unconventional title means the merged
 work never triggers a release.
 
-Releasing is manual and takes no arguments: **Actions → Semantic Release → Run
+Releasing is manual and takes no arguments: **Actions → Release → Run
 workflow**. There is no version to choose and no tag to push; semantic-release
 works out the version, publishes to npm with a provenance attestation, commits
 the bump back to `main`, and opens the GitHub Release. If nothing since the last

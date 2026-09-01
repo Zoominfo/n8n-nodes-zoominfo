@@ -19,9 +19,9 @@ jobs:
 
     # Least privilege, declared rather than inherited: this job only reads the
     # tree. It needs no token write access of any kind, and nothing here
-    # publishes. The release job in semantic-release.yml is the only one that
-    # asks for more, and it asks only for `id-token: write` to mint the OIDC
-    # token for npm provenance.
+    # publishes. The release job in release.yml is the only one that asks for
+    # more, and it asks only for `id-token: write` to mint the OIDC token for
+    # npm provenance.
     permissions:
       contents: read
 
