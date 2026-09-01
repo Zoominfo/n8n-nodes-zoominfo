@@ -1,13 +1,26 @@
-import type { Icon, ICredentialType, INodeProperties } from 'n8n-workflow';
+import type {
+	Icon,
+	ICredentialTestRequest,
+	ICredentialType,
+	INodeProperties,
+} from 'n8n-workflow';
 
 /**
- * Authorization-code + PKCE auth for the ZoomInfo GTM API, for when a workflow
- * must act as a specific ZoomInfo user rather than as the application.
+ * Authorization-code + PKCE auth for the ZoomInfo GTM API, and the node's only
+ * credential: the user is redirected to the ZoomInfo login, signs in with their
+ * own username and password, and the workflow then acts as that specific
+ * ZoomInfo user, with their entitlements.
  *
- * Caution: ZoomInfo rotates refresh tokens and each one is single-use. If two
- * executions of the same workflow refresh at the same moment, one of them
- * invalidates the other's token and the credential has to be reconnected by
- * hand. Prefer ZoomInfoOAuth2Api (client credentials) for unattended work.
+ * Caution for unattended workflows: ZoomInfo rotates refresh tokens and each one
+ * is single-use. If two executions of the same workflow refresh at the same
+ * moment, one of them invalidates the other's token and the credential has to be
+ * reconnected by hand. Keep concurrency at 1 on schedules that run unattended.
+ *
+ * A client-credentials credential was considered and dropped: it removes the
+ * rotating-token hazard, but it also removes per-user attribution, and it
+ * requires the `client_credentials` grant to be enabled on the DevPortal app —
+ * which is not the default, so the common outcome was an `unauthorized_client`
+ * dead end for anyone who picked it.
  */
 export class ZoomInfoPkceOAuth2Api implements ICredentialType {
 	name = 'zoomInfoPkceOAuth2Api';
@@ -16,7 +29,7 @@ export class ZoomInfoPkceOAuth2Api implements ICredentialType {
 
 	displayName = 'ZoomInfo GTM PKCE OAuth2 API';
 
-	icon: Icon = { light: 'file:../icons/zoominfo.svg', dark: 'file:../icons/zoominfo.dark.svg' };
+	icon: Icon = 'file:../icons/zoominfo.svg';
 
 	documentationUrl = 'https://docs.zoominfo.com/docs/authorization-code-flow-pkce';
 
@@ -46,8 +59,10 @@ export class ZoomInfoPkceOAuth2Api implements ICredentialType {
 			default: 'https://api.zoominfo.com/gtm/oauth/v1/token',
 			required: true,
 		},
-		// See the note in ZoomInfoOAuth2Api: omitting `scope` grants every scope
-		// the DevPortal app holds, which is what we want.
+		// Left empty deliberately. ZoomInfo grants *all* scopes selected for the
+		// app in DevPortal when `scope` is omitted, whereas requesting a scope the
+		// app does not hold fails the whole token request. An empty default is
+		// therefore correct for every customer, regardless of their entitlements.
 		{
 			displayName: 'Scope',
 			name: 'scope',
@@ -67,4 +82,14 @@ export class ZoomInfoPkceOAuth2Api implements ICredentialType {
 			default: 'header',
 		},
 	];
+
+	// Powers the "Test" button in the credential dialog. `GET /users/usage` is
+	// the right probe: it consumes no credits, so checking a connection is free
+	// however often a user clicks it.
+	test: ICredentialTestRequest = {
+		request: {
+			baseURL: 'https://api.zoominfo.com/gtm/data/v1',
+			url: '/users/usage',
+		},
+	};
 }

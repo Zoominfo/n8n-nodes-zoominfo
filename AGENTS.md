@@ -96,7 +96,9 @@ Load these before working on the relevant area:
 ## Additional resources
 If you need any extra information, here are links to n8n's official docs
 regarding building community nodes:
-- https://docs.n8n.io/integrations/community-nodes/build-community-nodes/
-- https://docs.n8n.io/integrations/creating-nodes/overview/
-- https://docs.n8n.io/integrations/creating-nodes/build/reference/
-- https://docs.n8n.io/integrations/creating-nodes/build/reference/ux-guidelines/
+- https://docs.n8n.io/integrations/community-nodes/building-community-nodes
+- https://docs.n8n.io/connect/create-nodes/overview
+- https://docs.n8n.io/connect/create-nodes/build-your-node/reference
+- https://docs.n8n.io/connect/create-nodes/build-your-node/reference/ux-guidelines
+- https://docs.n8n.io/connect/create-nodes/build-your-node/reference/verification-guidelines
+- https://docs.n8n.io/connect/create-nodes/deploy-your-node/submit-community-nodes

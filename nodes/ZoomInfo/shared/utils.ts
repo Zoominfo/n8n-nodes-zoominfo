@@ -16,21 +16,27 @@ export async function applyAttributes(
 
 	let parsed: IDataObject;
 
-	if (raw === undefined || raw === null || raw === '') {
+	// Trimmed before the empty check so a field holding only whitespace behaves
+	// the same as one left blank, rather than failing as invalid JSON.
+	const trimmed = typeof raw === 'string' ? raw.trim() : raw;
+
+	if (trimmed === undefined || trimmed === null || trimmed === '') {
 		parsed = {};
-	} else if (typeof raw === 'string') {
+	} else if (typeof trimmed === 'string') {
 		try {
-			parsed = jsonParse<IDataObject>(raw);
+			parsed = jsonParse<IDataObject>(trimmed);
 		} catch {
 			throw new NodeOperationError(this.getNode(), 'Attributes is not valid JSON', {
 				description: 'Provide a JSON object, for example {"companyName":"ZoomInfo"}',
 			});
 		}
 	} else {
-		parsed = raw;
+		parsed = trimmed;
 	}
 
-	if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+	// `parsed === null` is checked explicitly: `typeof null` is 'object', so a
+	// literal `null` would otherwise pass and be sent as `"attributes": null`.
+	if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) {
 		throw new NodeOperationError(this.getNode(), 'Attributes must be a JSON object', {
 			description: 'Send the attributes only. The node adds the surrounding data/type envelope.',
 		});

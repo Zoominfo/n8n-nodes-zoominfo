@@ -7,8 +7,10 @@ on:
       - main
 
 # Cancel in-progress runs for the same branch/PR to avoid wasting CI minutes.
+# The ref has to be interpolated: a bare "ci-$" is a single literal group shared
+# by every branch, so any push would cancel unrelated runs.
 concurrency:
-  group: ci-$
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -32,3 +34,13 @@ jobs:
 
       - name: Run build
         run: 'npm run build'
+
+      # Routing tests against the real n8n declarative router, and the
+      # description-level smoke checks. Both build first; neither needs
+      # credentials or network access. Live API checks are deliberately not run
+      # here — see scripts/live.mjs.
+      - name: Run tests
+        run: 'npm test'
+
+      - name: Run smoke checks
+        run: 'npm run smoke'
