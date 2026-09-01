@@ -189,7 +189,13 @@ console.log('\nRouting (one record each)');
 const OPERATIONS = [
 	['contact.search', 'POST', '/contacts/search', 'ContactSearch', { companyName: 'ZoomInfo' }],
 	['company.search', 'POST', '/companies/search', 'CompanySearch', { companyName: 'ZoomInfo' }],
-	['signal.searchIntent', 'POST', '/intent/search', 'IntentSearch', { topics: ['sales intelligence'] }],
+	[
+		'signal.searchIntent',
+		'POST',
+		'/intent/search',
+		'IntentSearch',
+		{ topics: ['sales intelligence'] },
+	],
 	['signal.searchScoops', 'POST', '/scoops/search', 'ScoopSearch', { companyName: 'ZoomInfo' }],
 	['signal.searchNews', 'POST', '/news/search', 'NewsSearch', { companyName: 'ZoomInfo' }],
 ];
@@ -199,11 +205,9 @@ const pageMetas = [];
 
 for (const [label, method, path, type, attributes] of OPERATIONS) {
 	await step(`${label} → ${method} ${path}`, async () => {
-		const { status, ok, body, raw } = await api(
-			method,
-			`${path}?page[size]=1&page[number]=1`,
-			{ data: { type, attributes } },
-		);
+		const { status, ok, body, raw } = await api(method, `${path}?page[size]=1&page[number]=1`, {
+			data: { type, attributes },
+		});
 		assert(ok, `${status}: ${raw.slice(0, 400)}`);
 
 		if (body?.meta?.page) pageMetas.push({ label, page: body.meta.page });
@@ -280,8 +284,6 @@ await step('meta.totalResults is present and distinct from page.total', async ()
 });
 
 console.log(
-	failures === 0
-		? '\nAll live checks passed.\n'
-		: `\n${failures} live check(s) failed.\n`,
+	failures === 0 ? '\nAll live checks passed.\n' : `\n${failures} live check(s) failed.\n`,
 );
 process.exit(failures === 0 ? 0 : 1);

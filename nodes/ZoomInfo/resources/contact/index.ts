@@ -1,5 +1,9 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { attributesProperty, paginationProperties, sortProperties } from '../../shared/descriptions';
+import {
+	attributesProperty,
+	paginationProperties,
+	sortProperties,
+} from '../../shared/descriptions';
 
 const showForContact = { resource: ['contact'] };
 const showForSearch = { resource: ['contact'], operation: ['search'] };

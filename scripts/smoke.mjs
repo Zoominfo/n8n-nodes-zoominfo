@@ -78,7 +78,10 @@ check('node name is zoomInfo', () => {
 });
 check('base URL targets the GTM data API', () => {
 	const expected = 'https://api.zoominfo.com/gtm/data/v1';
-	assert(description.requestDefaults.baseURL === expected, `got ${description.requestDefaults.baseURL}`);
+	assert(
+		description.requestDefaults.baseURL === expected,
+		`got ${description.requestDefaults.baseURL}`,
+	);
 	return expected;
 });
 check('sends the JSON:API media type', () => {
@@ -189,7 +192,10 @@ async function envelope(value, body) {
 await checkAsync('wraps attributes and preserves the routed data.type', async () => {
 	const out = await envelope('{"companyName":"ZoomInfo"}', { data: { type: 'ContactSearch' } });
 	assert(out.body.data.type === 'ContactSearch', `type lost: ${JSON.stringify(out.body)}`);
-	assert(out.body.data.attributes.companyName === 'ZoomInfo', `attributes wrong: ${JSON.stringify(out.body)}`);
+	assert(
+		out.body.data.attributes.companyName === 'ZoomInfo',
+		`attributes wrong: ${JSON.stringify(out.body)}`,
+	);
 	return JSON.stringify(out.body);
 });
 
@@ -223,7 +229,6 @@ await checkAsync('rejects a JSON array', async () => {
 	}
 	assert(threw, 'array was accepted as attributes');
 });
-
 
 console.log(`\n${checks - failures}/${checks} checks passed\n`);
 process.exit(failures === 0 ? 0 : 1);

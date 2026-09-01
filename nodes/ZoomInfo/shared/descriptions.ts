@@ -83,7 +83,8 @@ export function paginationProperties(show: Show): INodeProperties[] {
 								},
 							},
 							continue:
-								'={{ ($response.body?.meta?.page?.number ?? 1) < ($response.body?.meta?.page?.total ?? 1) }}',						},
+								'={{ ($response.body?.meta?.page?.number ?? 1) < ($response.body?.meta?.page?.total ?? 1) }}',
+						},
 					},
 				},
 			},

@@ -81,6 +81,13 @@ jobs:
           node-version: 'lts/*'
           cache: 'npm'
 
+      # Trusted publishing (OIDC) requires npm >= 11.5.1. The npm bundled with
+      # the current Node LTS satisfies that today, but "lts/*" moves: pinning
+      # the upgrade explicitly means a change to the LTS line cannot silently
+      # break publishing with an auth error that looks unrelated.
+      - name: Ensure npm supports trusted publishing
+        run: 'npm install -g npm@latest'
+
       - name: Install dependencies
         run: 'npm ci'
 

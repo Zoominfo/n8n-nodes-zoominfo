@@ -69,7 +69,10 @@ export const signalDescription: INodeProperties[] = [
 		default: 'searchIntent',
 	},
 	// Intent requires between 1 and 50 topics.
-	attributesProperty(showForIntent, 'Example: {"topics": ["data enrichment", "sales intelligence"]}'),
+	attributesProperty(
+		showForIntent,
+		'Example: {"topics": ["data enrichment", "sales intelligence"]}',
+	),
 	attributesProperty(showForScoops, 'Example: {"companyName": "ZoomInfo"}'),
 	// News takes all-optional inputs, but at least one is required.
 	attributesProperty(showForNews, 'Example: {"companyName": "ZoomInfo"}'),

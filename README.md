@@ -283,6 +283,14 @@ Rate limits are evaluated against per-second, per-hour and per-day windows at on
 Every response carries `X-RateLimit-*` headers, and `429` responses include
 `Retry-After`.
 
+The node does not retry on its own. For anything running unattended, open the node's
+**Settings** tab and switch on **Retry On Fail** — three tries with a short wait is
+enough to ride out a per-second limit. Note that n8n's retry uses a fixed delay and
+does not read `Retry-After`, so if you are hitting the per-hour or per-day window
+instead, retrying will not help: reduce the request volume, or spread the workflow
+out on a schedule. A **Return All** over a large result set is the usual way to
+discover the per-second limit, since it pages as fast as the API answers.
+
 ## Development
 
 ```bash

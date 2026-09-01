@@ -1,9 +1,4 @@
-import type {
-	Icon,
-	ICredentialTestRequest,
-	ICredentialType,
-	INodeProperties,
-} from 'n8n-workflow';
+import type { Icon, ICredentialTestRequest, ICredentialType, INodeProperties } from 'n8n-workflow';
 
 /**
  * Authorization-code + PKCE auth for the ZoomInfo GTM API, and the node's only

@@ -26,8 +26,9 @@ const knownParameters = new Set(description.properties.map((p) => p.name));
 const knownCredentials = new Set(description.credentials.map((c) => c.name));
 
 /** Every ```json block in the README, parsed. */
-const blocks = [...readFileSync(join(root, 'README.md'), 'utf8').matchAll(/```json\n([\s\S]*?)```/g)]
-	.map((match, index) => ({ index, raw: match[1] }));
+const blocks = [
+	...readFileSync(join(root, 'README.md'), 'utf8').matchAll(/```json\n([\s\S]*?)```/g),
+].map((match, index) => ({ index, raw: match[1] }));
 
 /** Just the blocks that are n8n workflow exports. */
 function workflows() {
@@ -64,7 +65,10 @@ describe('README json blocks', () => {
 
 	test('the README contains importable example workflows', () => {
 		// Guards against the examples being deleted: verification requires them.
-		assert.ok(workflows().length >= 3, `expected at least 3 example workflows, got ${workflows().length}`);
+		assert.ok(
+			workflows().length >= 3,
+			`expected at least 3 example workflows, got ${workflows().length}`,
+		);
 		assert.ok(zoomInfoNodes().length >= 3, 'example workflows contain no ZoomInfo nodes');
 	});
 });
