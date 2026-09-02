@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "n8n community node for the ZoomInfo GTM API: contact and company search and enrichment, intent, scoops, news, and usage",
     "license": "MIT",
-    "homepage": "https://github.com/Zoominfo/n8n-nodes#readme",
+    "homepage": "https://github.com/Zoominfo/n8n-nodes-zoominfo#readme",
     "keywords": [
         "n8n-community-node-package",
         "n8n",
@@ -18,10 +18,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Zoominfo/n8n-nodes.git"
+        "url": "git+https://github.com/Zoominfo/n8n-nodes-zoominfo.git"
     },
     "bugs": {
-        "url": "https://github.com/Zoominfo/n8n-nodes/issues"
+        "url": "https://github.com/Zoominfo/n8n-nodes-zoominfo/issues"
     },
     "scripts": {
         "build": "n8n-node build",
