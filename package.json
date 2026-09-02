@@ -31,8 +31,7 @@
         "lint:fix": "n8n-node lint --fix",
         "test": "npm run build && node --test \"test/*.test.mjs\"",
         "test:live": "node scripts/live.mjs",
-        "smoke": "npm run build && node scripts/smoke.mjs",
-        "prepublishOnly": "n8n-node prerelease"
+        "smoke": "npm run build && node scripts/smoke.mjs"
     },
     "engines": {
         "node": ">=20"
