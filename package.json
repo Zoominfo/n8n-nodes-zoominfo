@@ -1,9 +1,9 @@
 {
-    "name": "n8n-nodes-zoominfo",
+    "name": "@zoominfo/n8n-nodes",
     "version": "0.1.0",
     "description": "n8n community node for the ZoomInfo GTM API: contact and company search and enrichment, intent, scoops, news, and usage",
     "license": "MIT",
-    "homepage": "https://github.com/Zoominfo/n8n-nodes-zoominfo#readme",
+    "homepage": "https://github.com/Zoominfo/n8n-nodes#readme",
     "keywords": [
         "n8n-community-node-package",
         "n8n",
@@ -13,34 +13,41 @@
         "enrichment"
     ],
     "author": {
-        "name": "parkersequeira-zi",
-        "email": "parker.sequeira@zoominfo.com"
+        "name": "ZoomInfo",
+        "email": "integrationapps@zoominfo.com"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Zoominfo/n8n-nodes-zoominfo.git"
+        "url": "git+https://github.com/Zoominfo/n8n-nodes.git"
     },
     "bugs": {
-        "url": "https://github.com/Zoominfo/n8n-nodes-zoominfo/issues"
+        "url": "https://github.com/Zoominfo/n8n-nodes/issues"
     },
-   "scripts": {
-		"build": "n8n-node build",
-		"build:watch": "tsc --watch",
-		"dev": "n8n-node dev",
-		"lint": "n8n-node lint",
-		"lint:fix": "n8n-node lint --fix",
-		"smoke": "npm run build && node scripts/smoke.mjs",
-		"release": "n8n-node release",
-		"prepublishOnly": "n8n-node prerelease"
-	},
+    "scripts": {
+        "build": "n8n-node build",
+        "build:watch": "tsc --watch",
+        "dev": "n8n-node dev",
+        "lint": "n8n-node lint",
+        "lint:fix": "n8n-node lint --fix",
+        "test": "npm run build && node --test \"test/*.test.mjs\"",
+        "test:live": "node scripts/live.mjs",
+        "smoke": "npm run build && node scripts/smoke.mjs",
+        "prepublishOnly": "n8n-node prerelease"
+    },
+    "engines": {
+        "node": ">=20"
+    },
     "files": [
         "dist"
     ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    },
     "n8n": {
         "n8nNodesApiVersion": 1,
         "strict": true,
         "credentials": [
-            "dist/credentials/ZoomInfoOAuth2Api.credentials.js",
             "dist/credentials/ZoomInfoPkceOAuth2Api.credentials.js"
         ],
         "nodes": [
@@ -48,10 +55,11 @@
         ]
     },
     "devDependencies": {
-        "@n8n/node-cli": "*",
+        "@n8n/node-cli": "^0.45.4",
+        "@semantic-release/git": "^11.0.1",
         "eslint": "9.32.0",
+        "n8n-core": "^2.36.5",
         "prettier": "3.6.2",
-        "release-it": "^19.0.4",
         "typescript": "5.9.2"
     },
     "peerDependencies": {

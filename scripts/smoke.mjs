@@ -78,7 +78,10 @@ check('node name is zoomInfo', () => {
 });
 check('base URL targets the GTM data API', () => {
 	const expected = 'https://api.zoominfo.com/gtm/data/v1';
-	assert(description.requestDefaults.baseURL === expected, `got ${description.requestDefaults.baseURL}`);
+	assert(
+		description.requestDefaults.baseURL === expected,
+		`got ${description.requestDefaults.baseURL}`,
+	);
 	return expected;
 });
 check('sends the JSON:API media type', () => {
@@ -86,10 +89,17 @@ check('sends the JSON:API media type', () => {
 	assert(headers['Content-Type'] === 'application/vnd.api+json', `got ${headers['Content-Type']}`);
 	assert(headers.Accept === 'application/vnd.api+json', `got ${headers.Accept}`);
 });
-check('PKCE is the default authentication', () => {
+check('declares exactly one credential', () => {
+	// The node is PKCE-only: a client-credentials alternative was dropped, and
+	// with a single credential the router needs no `authentication` switch.
+	const names = description.credentials.map((c) => c.name);
+	assert(names.length === 1, `expected 1 credential, got ${names.length}: ${names.join(',')}`);
+	assert(names[0] === 'zoomInfoPkceOAuth2Api', `got ${names[0]}`);
+	return names[0];
+});
+check('has no leftover authentication switch', () => {
 	const auth = description.properties.find((p) => p.name === 'authentication');
-	assert(auth, 'no authentication property');
-	assert(auth.default === 'pkce', `default is ${auth.default}`);
+	assert(!auth, 'an "authentication" property is still declared');
 });
 
 console.log('\nCredentials');
@@ -182,7 +192,10 @@ async function envelope(value, body) {
 await checkAsync('wraps attributes and preserves the routed data.type', async () => {
 	const out = await envelope('{"companyName":"ZoomInfo"}', { data: { type: 'ContactSearch' } });
 	assert(out.body.data.type === 'ContactSearch', `type lost: ${JSON.stringify(out.body)}`);
-	assert(out.body.data.attributes.companyName === 'ZoomInfo', `attributes wrong: ${JSON.stringify(out.body)}`);
+	assert(
+		out.body.data.attributes.companyName === 'ZoomInfo',
+		`attributes wrong: ${JSON.stringify(out.body)}`,
+	);
 	return JSON.stringify(out.body);
 });
 
@@ -216,7 +229,6 @@ await checkAsync('rejects a JSON array', async () => {
 	}
 	assert(threw, 'array was accepted as attributes');
 });
-
 
 console.log(`\n${checks - failures}/${checks} checks passed\n`);
 process.exit(failures === 0 ? 0 : 1);

@@ -15,7 +15,12 @@
 		"preserveConstEnums": true,
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
-		"incremental": true,
+		// No `incremental`, deliberately. It bought nothing on a package of eight
+		// files, and its build cache landed in outDir — which `files: ["dist"]`
+		// publishes, making 207 kB of the 260 kB tarball build cruft. Relocating
+		// the cache outside dist/ is worse than removing it: `n8n-node build`
+		// cleans dist/, so a cache that survives the clean makes tsc believe its
+		// outputs are current and emit nothing at all, leaving an empty dist/.
 		"declaration": true,
 		"sourceMap": true,
 		"skipLibCheck": true,

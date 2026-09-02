@@ -8,7 +8,11 @@ export class ZoomInfo implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'ZoomInfo',
 		name: 'zoomInfo',
-		icon: { light: 'file:../../icons/zoominfo.svg', dark: 'file:../../icons/zoominfo.dark.svg' },
+		// A single icon, deliberately: the mark is a self-contained red tile with a
+		// white glyph, which reads on both the light and dark canvas. A `dark`
+		// variant was declared previously but was byte-identical to this file,
+		// which only implied a dark treatment that did not exist.
+		icon: 'file:../../icons/zoominfo.svg',
 		group: ['input'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
@@ -21,22 +25,8 @@ export class ZoomInfo implements INodeType {
 		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
-				name: 'zoomInfoOAuth2Api',
-				required: true,
-				displayOptions: {
-					show: {
-						authentication: ['clientCredentials'],
-					},
-				},
-			},
-			{
 				name: 'zoomInfoPkceOAuth2Api',
 				required: true,
-				displayOptions: {
-					show: {
-						authentication: ['pkce'],
-					},
-				},
 			},
 		],
 		requestDefaults: {
@@ -47,24 +37,6 @@ export class ZoomInfo implements INodeType {
 			},
 		},
 		properties: [
-			{
-				displayName: 'Authentication',
-				name: 'authentication',
-				type: 'options',
-				options: [
-					{
-						name: 'Authorization Code (PKCE)',
-						value: 'pkce',
-						description: 'Sign in as a ZoomInfo user. Requires a client ID and secret.',
-					},
-					{
-						name: 'Client Credentials',
-						value: 'clientCredentials',
-						description: 'Server-to-server auth with no user sign-in',
-					},
-				],
-				default: 'pkce',
-			},
 			{
 				displayName: 'Resource',
 				name: 'resource',

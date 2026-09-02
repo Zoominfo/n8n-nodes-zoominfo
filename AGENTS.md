@@ -81,6 +81,39 @@ project _may_ contain example nodes and/or credentials that need to be
   CHANGELOG.md** in the root of the repository
 - Read `.agents/workflow.md` for more info
 
+## Commits and releases
+
+Commit messages **must** follow [Conventional Commits](https://www.conventionalcommits.org).
+This is not a style preference: `.github/workflows/release.yml` runs
+semantic-release, which reads the commit types since the last release to decide
+the next version. A commit that does not follow the convention is invisible to
+that calculation.
+
+```
+feat: add Company Enrich operation        -> minor
+fix: stop Return All dropping the sort    -> patch
+docs(README): correct the callback URL    -> patch
+chore: bump eslint                        -> no release
+```
+
+Breaking changes take a `BREAKING CHANGE:` footer (or `feat!:`) and bump the
+major. When squash-merging a PR, the **squash title becomes the commit message**,
+so it has to follow the convention too — an unconventional title means the merged
+work never triggers a release.
+
+Releasing is manual and takes no arguments: **Actions → Release → Run
+workflow**. There is no version to choose and no tag to push; semantic-release
+works out the version, publishes to npm with a provenance attestation, commits
+the bump back to `main`, and opens the GitHub Release. If nothing since the last
+release warrants one, it exits without doing anything.
+
+Do **not** run `npm publish` locally. `prepublishOnly` blocks it, and a package
+published from a laptop carries no provenance, which disqualifies it from n8n
+verification.
+
+`CHANGELOG.md` is **not** generated. No changelog plugin is configured, so update
+it by hand in the same PR as the change it describes.
+
 ## Context-specific docs
 Load these before working on the relevant area:
 
@@ -96,7 +129,9 @@ Load these before working on the relevant area:
 ## Additional resources
 If you need any extra information, here are links to n8n's official docs
 regarding building community nodes:
-- https://docs.n8n.io/integrations/community-nodes/build-community-nodes/
-- https://docs.n8n.io/integrations/creating-nodes/overview/
-- https://docs.n8n.io/integrations/creating-nodes/build/reference/
-- https://docs.n8n.io/integrations/creating-nodes/build/reference/ux-guidelines/
+- https://docs.n8n.io/integrations/community-nodes/building-community-nodes
+- https://docs.n8n.io/connect/create-nodes/overview
+- https://docs.n8n.io/connect/create-nodes/build-your-node/reference
+- https://docs.n8n.io/connect/create-nodes/build-your-node/reference/ux-guidelines
+- https://docs.n8n.io/connect/create-nodes/build-your-node/reference/verification-guidelines
+- https://docs.n8n.io/connect/create-nodes/deploy-your-node/submit-community-nodes
