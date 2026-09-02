@@ -71,8 +71,8 @@ jobs:
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
         with:
-          client-id: ${{ vars.HOMEBREW_CLIENT_ID }}
-          private-key: ${{ secrets.HOMEBREW_PRIVATE_KEY }}
+          client-id: ${{ vars.PUBLISHER_CLIENT_ID }}
+          private-key: ${{ secrets.PUBLISHER_PRIVATE_KEY }}
 
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
@@ -88,13 +88,6 @@ jobs:
         with:
           node-version: '24.x'
           cache: 'npm'
-
-      # Trusted publishing requires npm >= 11.5.1. The npm bundled with Node 24
-      # satisfies that today, but pinning the upgrade means a change to the
-      # bundled version cannot break publishing with an auth error that looks
-      # unrelated to Node.
-      - name: Ensure npm supports trusted publishing
-        run: 'npm install -g npm@latest'
 
       - name: Install dependencies
         run: 'npm ci --no-fund --no-audit'

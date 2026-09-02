@@ -1,4 +1,4 @@
-# @zoominfo/n8n-nodes
+# @zoominfo/n8n-nodes-zoominfo
 
 An [n8n](https://n8n.io) community node for the **ZoomInfo GTM API** — contact and
 company search and enrichment, intent signals, scoops, news, and usage reporting.
@@ -11,7 +11,7 @@ workflow automation platform.
 ## Installation
 
 Follow the [community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation-and-management/gui-installation),
-using `@zoominfo/n8n-nodes` as the package name.
+using `@zoominfo/n8n-nodes-zoominfo` as the package name.
 
 ## Credentials
 
@@ -136,7 +136,7 @@ credential works without spending anything.
     },
     {
       "parameters": { "resource": "usage", "operation": "get" },
-      "type": "@zoominfo/n8n-nodes.zoomInfo",
+      "type": "@zoominfo/n8n-nodes-zoominfo.zoomInfo",
       "typeVersion": 1,
       "position": [220, 0],
       "id": "a1000000-0000-4000-8000-000000000002",
@@ -182,7 +182,7 @@ record arrives as its own n8n item.
         "returnAll": false,
         "limit": 25
       },
-      "type": "@zoominfo/n8n-nodes.zoomInfo",
+      "type": "@zoominfo/n8n-nodes-zoominfo.zoomInfo",
       "typeVersion": 1,
       "position": [220, 0],
       "id": "b2000000-0000-4000-8000-000000000002",
@@ -228,7 +228,7 @@ Takes a name and company and returns ZoomInfo's data for it. `matchPersonInput` 
         "operation": "enrich",
         "attributes": "{\n  \"matchPersonInput\": [\n    { \"firstName\": \"Henry\", \"lastName\": \"Schuck\", \"companyName\": \"ZoomInfo\" }\n  ],\n  \"outputFields\": [\"id\", \"email\", \"jobTitle\", \"companyName\"]\n}"
       },
-      "type": "@zoominfo/n8n-nodes.zoomInfo",
+      "type": "@zoominfo/n8n-nodes-zoominfo.zoomInfo",
       "typeVersion": 1,
       "position": [220, 0],
       "id": "c3000000-0000-4000-8000-000000000002",
