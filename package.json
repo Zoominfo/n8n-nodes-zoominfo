@@ -1,6 +1,6 @@
 {
     "name": "@zoominfo/n8n-nodes",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "n8n community node for the ZoomInfo GTM API: contact and company search and enrichment, intent, scoops, news, and usage",
     "license": "MIT",
     "homepage": "https://github.com/Zoominfo/n8n-nodes#readme",
@@ -31,8 +31,7 @@
         "lint:fix": "n8n-node lint --fix",
         "test": "npm run build && node --test \"test/*.test.mjs\"",
         "test:live": "node scripts/live.mjs",
-        "smoke": "npm run build && node scripts/smoke.mjs",
-        "prepublishOnly": "n8n-node prerelease"
+        "smoke": "npm run build && node scripts/smoke.mjs"
     },
     "engines": {
         "node": ">=20"
