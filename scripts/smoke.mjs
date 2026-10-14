@@ -84,13 +84,13 @@ console.log('Node description');
 check('node name is zoomInfo', () => {
 	assert(description.name === 'zoomInfo', `got ${description.name}`);
 });
-check('base URL targets the GTM data API', () => {
-	const expected = 'https://api.zoominfo.com/gtm/data/v1';
+check("base URL targets the GTM data API under the credential's base URL", () => {
+	const { baseURL } = description.requestDefaults;
 	assert(
-		description.requestDefaults.baseURL === expected,
-		`got ${description.requestDefaults.baseURL}`,
+		baseURL.includes('$credentials.baseUrl') && baseURL.endsWith('/data/v1'),
+		`got ${baseURL}`,
 	);
-	return expected;
+	return baseURL;
 });
 check('sends the JSON:API media type', () => {
 	const headers = description.requestDefaults.headers;
@@ -165,7 +165,6 @@ for (const [resource, operations] of Object.entries(EXPECTED)) {
 }
 
 console.log('\nCopilot base URL');
-const COPILOT_BASE = 'https://api.zoominfo.com/gtm/copilot/v1';
 const COPILOT_OPS = [
 	['contact', 'getLookalikes'],
 	['contact', 'getRecommendations'],
@@ -177,7 +176,10 @@ for (const [resource, operation] of COPILOT_OPS) {
 			(p) => p.name === 'operation' && p.displayOptions?.show?.resource?.includes(resource),
 		);
 		const request = opProp.options.find((o) => o.value === operation).routing.request;
-		assert(request.baseURL === COPILOT_BASE, `baseURL is ${request.baseURL}`);
+		assert(
+			request.baseURL?.includes('$credentials.baseUrl') && request.baseURL.endsWith('/copilot/v1'),
+			`baseURL is ${request.baseURL}`,
+		);
 	});
 }
 check('data-API operations keep the node-wide base URL', () => {
