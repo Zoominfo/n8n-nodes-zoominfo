@@ -124,6 +124,11 @@ describe('credentials', () => {
 					'/lookup/search',
 					`${instance.name} should probe the credit-free lookup endpoint`,
 				);
+				// The endpoint answers 400 without both filters.
+				assert.deepEqual(instance.test.request.qs, {
+					'filter[entity]': 'company',
+					'filter[fieldType]': 'input',
+				});
 			}
 		}
 	});

@@ -112,11 +112,16 @@ export class ZoomInfoPkceOAuth2Api implements ICredentialType {
 	// Powers the "Test" button in the credential dialog. `GET /lookup/search` is
 	// the right probe: it consumes no credits, so checking a connection is free
 	// however often a user clicks it, and unlike `/users/usage` it returns static
-	// reference data rather than the account's credit usage.
+	// reference data rather than the account's credit usage. It answers 400
+	// without `filter[entity]` and `filter[fieldType]`, so both are sent.
 	test: ICredentialTestRequest = {
 		request: {
 			baseURL: '={{$credentials.baseUrl}}/data/v1',
 			url: '/lookup/search',
+			qs: {
+				'filter[entity]': 'company',
+				'filter[fieldType]': 'input',
+			},
 		},
 	};
 }

@@ -25,9 +25,10 @@ OAuth authorization and token URLs still point at ZoomInfo. Requests are unchang
 for existing credentials.
 
 - Node version 1.1 marks installs that support it; behaviour is identical to 1.
-- The credential's **Test** button now calls `GET /lookup/search` instead of
-  `GET /users/usage`. Both are credit-free, but the lookup returns static reference
-  data rather than the account's credit usage.
+- The credential's **Test** button now calls `GET /lookup/search` (with the
+  required `filter[entity]` and `filter[fieldType]`) instead of `GET /users/usage`.
+  Both are credit-free, but the lookup returns static reference data rather than
+  the account's credit usage.
 
 ## 1.1.0
 
