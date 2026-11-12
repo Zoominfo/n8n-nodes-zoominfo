@@ -16,6 +16,20 @@ Attributes JSON object.
   and an account role to match; see the README's *Copilot operations*. Apps connected
   before the scope was enabled must be reconnected.
 
+### Configurable base URL
+
+The credential gains a hidden **Base URL** (default `https://api.zoominfo.com/gtm`),
+and the Data API, Copilot API and dropdown lookups now derive their host from it
+instead of a hardcoded one. This lets n8n route the node through n8n Connect. The
+OAuth authorization and token URLs still point at ZoomInfo. Requests are unchanged
+for existing credentials.
+
+- Node version 1.1 marks installs that support it; behaviour is identical to 1.
+- The credential's **Test** button now calls `GET /lookup/search` (with the
+  required `filter[entity]` and `filter[fieldType]`) instead of `GET /users/usage`.
+  Both are credit-free, but the lookup returns static reference data rather than
+  the account's credit usage.
+
 ## 1.1.0
 
 Completes the Data API surface. Same base path and credential as everything else in

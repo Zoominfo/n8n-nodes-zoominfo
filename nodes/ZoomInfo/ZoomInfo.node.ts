@@ -22,7 +22,9 @@ export class ZoomInfo implements INodeType {
 		// which only implied a dark treatment that did not exist.
 		icon: 'file:../../icons/zoominfo.svg',
 		group: ['input'],
-		version: 1,
+		// 1.1: requests go to the credential's base URL instead of a hardcoded host
+		version: [1, 1.1],
+		defaultVersion: 1.1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Connect verified B2B company and contact intelligence to research accounts, find buyers, and act on buying signals.',
 		defaults: {

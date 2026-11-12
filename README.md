@@ -20,7 +20,8 @@ You need a ZoomInfo GTM API application, created in the ZoomInfo DevPortal. The 
 ships a single credential type.
 
 It supports the **Test** button in the credential dialog, which calls
-`GET /users/usage`. That endpoint consumes no credits, so connections can be tested
+`GET /lookup/search?filter[entity]=company&filter[fieldType]=input`. That endpoint
+consumes no credits, so connections can be tested
 as often as you like.
 
 ### ZoomInfo GTM PKCE OAuth2 API (authorization code + PKCE)

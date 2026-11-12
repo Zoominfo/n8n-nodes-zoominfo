@@ -430,6 +430,20 @@ describe('request defaults', () => {
 
 		assert.equal(server.requests[0].headers.authorization, 'Bearer test-token');
 	});
+
+	test("sends data-API requests to the credential's base URL", async () => {
+		// No requestDefaults override, so the node's own base URL expression runs.
+		// The trailing slash checks it is stripped rather than doubled.
+		server.reset();
+		server.enqueue(searchPage({ records: records(1) }));
+
+		await runOperation({
+			credentialBaseUrl: `${server.url}/`,
+			params: { resource: 'usage', operation: 'get' },
+		});
+
+		assert.equal(server.requests[0].path, '/data/v1/users/usage');
+	});
 });
 
 describe('credentials', () => {

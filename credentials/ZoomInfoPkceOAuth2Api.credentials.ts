@@ -99,15 +99,29 @@ export class ZoomInfoPkceOAuth2Api implements ICredentialType {
 			type: 'hidden',
 			default: 'header',
 		},
+		// Root of the data and copilot APIs; the OAuth endpoints above stay on
+		// ZoomInfo. n8n overrides this to route the node through n8n Connect.
+		{
+			displayName: 'Base URL',
+			name: 'baseUrl',
+			type: 'hidden',
+			default: 'https://api.zoominfo.com/gtm',
+		},
 	];
 
-	// Powers the "Test" button in the credential dialog. `GET /users/usage` is
+	// Powers the "Test" button in the credential dialog. `GET /lookup/search` is
 	// the right probe: it consumes no credits, so checking a connection is free
-	// however often a user clicks it.
+	// however often a user clicks it, and unlike `/users/usage` it returns static
+	// reference data rather than the account's credit usage. It answers 400
+	// without `filter[entity]` and `filter[fieldType]`, so both are sent.
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: 'https://api.zoominfo.com/gtm/data/v1',
-			url: '/users/usage',
+			baseURL: '={{$credentials.baseUrl}}/data/v1',
+			url: '/lookup/search',
+			qs: {
+				'filter[entity]': 'company',
+				'filter[fieldType]': 'input',
+			},
 		},
 	};
 }

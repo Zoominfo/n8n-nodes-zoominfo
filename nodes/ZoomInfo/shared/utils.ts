@@ -7,8 +7,21 @@ import type {
 } from 'n8n-workflow';
 import { NodeOperationError, jsonParse } from 'n8n-workflow';
 
+/**
+ * ZoomInfo's GTM API root, and the default of the credential's hidden `baseUrl`.
+ * n8n overrides that field to route the node through n8n Connect, so every
+ * request derives its host from the credential rather than from this constant.
+ */
+export const DEFAULT_BASE_URL = 'https://api.zoominfo.com/gtm';
+
+/**
+ * The credential's `baseUrl` as an expression, trailing slashes stripped. Falls
+ * back to the default for a credential that carries no `baseUrl`.
+ */
+const CREDENTIAL_BASE_URL = `{{($credentials.baseUrl || "${DEFAULT_BASE_URL}").replace(/\\/+$/, "")}}`;
+
 /** Single source of truth for the GTM data API base URL. */
-export const BASE_URL = 'https://api.zoominfo.com/gtm/data/v1';
+export const BASE_URL = `=${CREDENTIAL_BASE_URL}/data/v1`;
 
 /**
  * The GTM copilot API (lookalikes, recommendations). Same host
@@ -16,7 +29,7 @@ export const BASE_URL = 'https://api.zoominfo.com/gtm/data/v1';
  * override `baseURL` on their own request rather than moving the node-wide
  * default.
  */
-export const COPILOT_BASE_URL = 'https://api.zoominfo.com/gtm/copilot/v1';
+export const COPILOT_BASE_URL = `=${CREDENTIAL_BASE_URL}/copilot/v1`;
 
 /** `routing.request` for a copilot GET. `url` may be an `=` expression. */
 export function copilotGet(url: string) {
@@ -66,12 +79,15 @@ export async function getLookupOptions(
 	this: ILoadOptionsFunctions,
 	fieldName: string,
 ): Promise<INodePropertyOptions[]> {
+	// `BASE_URL` is an expression, which only the declarative router resolves.
+	const { baseUrl } = await this.getCredentials<{ baseUrl?: string }>('zoomInfoPkceOAuth2Api');
+
 	const response = (await this.helpers.httpRequestWithAuthentication.call(
 		this,
 		'zoomInfoPkceOAuth2Api',
 		{
 			method: 'GET',
-			baseURL: BASE_URL,
+			baseURL: `${(baseUrl || DEFAULT_BASE_URL).replace(/\/+$/, '')}/data/v1`,
 			url: `/lookup/${fieldName}`,
 			headers: { Accept: 'application/vnd.api+json' },
 		},

@@ -121,9 +121,14 @@ describe('credentials', () => {
 				assert.ok(instance.test?.request?.url, `${instance.name} has no test.request.url`);
 				assert.equal(
 					instance.test.request.url,
-					'/users/usage',
-					`${instance.name} should probe the credit-free usage endpoint`,
+					'/lookup/search',
+					`${instance.name} should probe the credit-free lookup endpoint`,
 				);
+				// The endpoint answers 400 without both filters.
+				assert.deepEqual(instance.test.request.qs, {
+					'filter[entity]': 'company',
+					'filter[fieldType]': 'input',
+				});
 			}
 		}
 	});

@@ -65,9 +65,10 @@ function loadNodeType() {
  * Authorization header for real, so tests can assert it.
  *
  * `getDecrypted` also receives the credential type the router selected, which is
- * recorded into `selected` so tests can assert the credential wiring.
+ * recorded into `selected` so tests can assert the credential wiring. It returns
+ * `baseUrl` too, which the node builds every request's host from.
  */
-function credentialsHelper(selected) {
+function credentialsHelper(selected, baseUrl) {
 	return {
 		getParentTypes: () => ['oAuth2Api'],
 		isCredentialUsableByNode: () => true,
@@ -85,7 +86,7 @@ function credentialsHelper(selected) {
 		},
 		async getDecrypted(_additionalData, _nodeCredentials, type) {
 			selected.push(type);
-			return { oauthTokenData: { access_token: 'test-token' } };
+			return { baseUrl, oauthTokenData: { access_token: 'test-token' } };
 		},
 		async updateCredentials() {},
 		async updateCredentialsOauthTokenData() {},
@@ -97,44 +98,31 @@ function credentialsHelper(selected) {
  * Runs one operation through the router.
  *
  * @param {object} opts
- * @param {string} opts.baseURL          Mock server URL; replaces requestDefaults.baseURL.
+ * @param {string} [opts.baseURL]        Mock server URL; replaces requestDefaults.baseURL.
+ * @param {string} [opts.credentialBaseUrl] The credential's `baseUrl`; defaults to `baseURL`.
  * @param {object} opts.params           Node parameters (resource, operation, attributes, …).
  * @param {object[]} [opts.input]        Input items; defaults to one empty item.
  * @returns {Promise<{items: object[], credentialTypes: string[]}>}
  */
-export async function runOperation({ baseURL, params, input = [{ json: {} }] }) {
+export async function runOperation({
+	baseURL,
+	credentialBaseUrl = baseURL,
+	params,
+	input = [{ json: {} }],
+}) {
 	const nodeType = loadNodeType();
 
-	// Point the node at the mock server. loadNodeType() re-instantiates per call,
-	// so this cannot leak between tests.
-	nodeType.description.requestDefaults = {
-		...nodeType.description.requestDefaults,
-		baseURL,
-	};
-
-	// Copilot operations override `baseURL` on their own request, which beats the
-	// default above, so they would bypass the mock and hit the real API. Point
-	// them at the mock too, keeping their path prefix (`/copilot/v1`) so tests can
-	// assert it. Rebuilt rather than mutated: the operation objects are shared
-	// module state, and a rewritten URL would no longer match on the next call.
-	const LIVE_ORIGIN = 'https://api.zoominfo.com/gtm';
-	nodeType.description.properties = nodeType.description.properties.map((property) => {
-		if (property.name !== 'operation' || !property.options) return property;
-		return {
-			...property,
-			options: property.options.map((option) => {
-				const own = option.routing?.request?.baseURL;
-				if (!own?.startsWith(LIVE_ORIGIN)) return option;
-				return {
-					...option,
-					routing: {
-						...option.routing,
-						request: { ...option.routing.request, baseURL: baseURL + own.slice(LIVE_ORIGIN.length) },
-					},
-				};
-			}),
+	// Point data-API operations at the mock server root, so tests assert their
+	// paths without the `/data/v1` prefix. loadNodeType() re-instantiates per
+	// call, so this cannot leak between tests. Copilot operations override
+	// `baseURL` on their own request with `<credential baseUrl>/copilot/v1`, which
+	// the credential stub points at the mock too.
+	if (baseURL !== undefined) {
+		nodeType.description.requestDefaults = {
+			...nodeType.description.requestDefaults,
+			baseURL,
 		};
-	});
+	}
 
 	const node = {
 		id: 'zoominfo-test-node',
@@ -165,7 +153,7 @@ export async function runOperation({ baseURL, params, input = [{ json: {} }] }) 
 
 	const credentialTypes = [];
 	const additionalData = {
-		credentialsHelper: credentialsHelper(credentialTypes),
+		credentialsHelper: credentialsHelper(credentialTypes, credentialBaseUrl),
 		restApiUrl: '',
 		instanceBaseUrl: '',
 		formWaitingBaseUrl: '',
